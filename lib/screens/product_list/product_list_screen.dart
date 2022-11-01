@@ -26,10 +26,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
       if (request.statusCode == 200) {
         var data = json.decode(request.body) as List;
         print("ProductData $data");
-        for(var i = 0; i< data.length ; i++)
-           {
-             product.add(ProductModel.fromJson(data[i]));
-           }
+        for (var i = 0; i < data.length; i++) {
+          product.add(ProductModel.fromJson(data[i]));
+        }
         return product;
       }
     } catch (e) {
@@ -73,49 +72,72 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   Widget productListWidget(List<ProductModel> item) {
-      return ListView.builder(
-        itemCount: item.length,
-        itemBuilder: (context, index) =>
-            Column(
-              children: [
-                Container(
-                  width: 200,
-                  // color: Colors.purple[300],
-                  child: item[index].category == "men's clothing" ? Center(
-                      child: Text(
-                        item[index].category,
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      )) : Container(),
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return ListView.builder(
+      itemCount: item.length,
+      itemBuilder: (context, index) => Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.0),
+            width: width * 0.9,
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: Colors.green[100],
+                width: 2,
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(0.0, 0.0),
+                  blurRadius: 1.0,
                 ),
-                Container(
-                  width: 200,
-                  // color: Colors.purple[300],
-                  child: item[index].category == "jewelery" ? Center(
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Image.network(
+                          item[index].image,
+                          height: 80.0,
+                          width: 80.0,
+                          fit: BoxFit.contain,
+                        ),
+                        Expanded(
+                            child: Text(
+                          item[index].title,
+                        )),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 6.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
-                        item[index].category,
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      )) : Container(),
-                ),
-                Container(
-                  width: 200,
-                  // color: Colors.purple[300],
-                  child: item[index].category == "electronics" ? Column(
-                    children: [
-                      Center(
-                          child: Text(
-                            item[index].category,
-                            style: TextStyle(fontSize: 18, color: Colors.black),
-                          )),
-                      Center(
-                          child: Text(
-                            item[index].price,
-                            style: TextStyle(fontSize: 18, color: Colors.black),
-                          )),
-                    ],
-                  ) : Container(),
+                        item[index].price,
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }
