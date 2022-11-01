@@ -11,26 +11,29 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
-  ProductModel product;
-  Future<ProductModel> productList;
+  List<ProductModel> product = [];
+  Future<List<ProductModel>> productList;
 
-  Future<ProductModel> updateAndGetList() async {
+  Future<List<ProductModel>> updateAndGetList() async {
     return productDisplay();
   }
 
-  Future<ProductModel> productDisplay() async {
+  Future<List<ProductModel>> productDisplay() async {
     try {
       var request =
           await http.get(Uri.parse('https://fakestoreapi.com/products'));
 
       if (request.statusCode == 200) {
-        var data = json.decode(request.body);
-        print("Product Data $data");
-        product = ProductModel.fromJson(data);
+        var data = json.decode(request.body) as List;
+        print("ProductData $data");
+        for(var i = 0; i< data.length ; i++)
+           {
+             product.add(ProductModel.fromJson(data[i]));
+           }
         return product;
       }
     } catch (e) {
-      print("Product Data Error $e");
+      print("ProductDataError $e");
     }
   }
 
@@ -48,7 +51,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         title: const Text("Products"),
         centerTitle: true,
       ),
-      body: FutureBuilder<ProductModel>(
+      body: FutureBuilder<List<ProductModel>>(
           future: productList,
           builder: (context, snapShot) {
             print("Future");
@@ -69,18 +72,49 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
-  Widget productListWidget(ProductModel item) {
+  Widget productListWidget(List<ProductModel> item) {
       return ListView.builder(
-        itemCount: 100,
+        itemCount: item.length,
         itemBuilder: (context, index) =>
-            Container(
-              width: 200,
-              // color: Colors.purple[300],
-              child: Center(
-                  child: Text(
-                    item.category,
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                  )),
+            Column(
+              children: [
+                Container(
+                  width: 200,
+                  // color: Colors.purple[300],
+                  child: item[index].category == "men's clothing" ? Center(
+                      child: Text(
+                        item[index].category,
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      )) : Container(),
+                ),
+                Container(
+                  width: 200,
+                  // color: Colors.purple[300],
+                  child: item[index].category == "jewelery" ? Center(
+                      child: Text(
+                        item[index].category,
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      )) : Container(),
+                ),
+                Container(
+                  width: 200,
+                  // color: Colors.purple[300],
+                  child: item[index].category == "electronics" ? Column(
+                    children: [
+                      Center(
+                          child: Text(
+                            item[index].category,
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          )),
+                      Center(
+                          child: Text(
+                            item[index].price,
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          )),
+                    ],
+                  ) : Container(),
+                ),
+              ],
             ),
       );
   }
