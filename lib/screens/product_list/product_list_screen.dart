@@ -113,13 +113,31 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           fit: BoxFit.contain,
                         ),
                         Expanded(
-                            child: Text(
-                          item[index].title,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                            Text(
+                              item[index].title,
                               style: TextStyle(
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.bold,
                               ),
-                        )),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              item[index].description,
+                              style: TextStyle(
+                                  fontSize: 12.0, color: Colors.black),
+                            ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(
