@@ -115,6 +115,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         Expanded(
                             child: Text(
                           item[index].title,
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                         )),
                       ],
                     ),
@@ -130,7 +134,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
