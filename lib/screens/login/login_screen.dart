@@ -12,8 +12,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
+  //BuildMethod
   @override
   Widget build(BuildContext context) {
+
+    //Email
     final emailField = TextField(
       style: style,
       decoration: InputDecoration(
@@ -22,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
+    //Password
     final passwordField = TextField(
       obscureText: true,
       style: style,
@@ -31,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
+    //LoginButton
     final loginButton = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),

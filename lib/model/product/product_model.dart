@@ -1,3 +1,4 @@
+//ProductModel
 class ProductModel {
   String id;
   String title;

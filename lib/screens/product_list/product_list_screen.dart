@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:task_app/model/product/product_model.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:task_app/widget/search/search_widget.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({Key key}) : super(key: key);
@@ -26,6 +25,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   //   return productDisplay();
   // }
 
+  //API call function
   Future<List<ProductModel>> productDisplay() async {
     try {
       var request =
@@ -56,6 +56,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     }
   }
 
+  //Debounce Method
   void debounce(
       VoidCallback callback, {
         Duration duration = const Duration(milliseconds: 1000),
@@ -67,6 +68,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
     debouncer = Timer(duration, callback);
   }
 
+
+  // Search Function
   Future searchBook(String query) async => debounce(() async {
     final books = await productDisplay();
 
@@ -78,6 +81,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
     });
   });
 
+
+  //Init Method
   @override
   void initState() {
     // productList = updateAndGetList();
@@ -85,7 +90,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     super.initState();
   }
 
-
+  //Build Method
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,6 +154,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
+
+  //Widget
   Widget productListWidget(List<ProductModel> item) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
