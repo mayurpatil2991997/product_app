@@ -15,6 +15,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   List<ProductModel> product = [];
   Future<List<ProductModel>> productList;
   String ratingValue = "";
+  TextEditingController searchController = TextEditingController();
 
   Future<List<ProductModel>> updateAndGetList() async {
     return productDisplay();
@@ -52,135 +53,155 @@ class _ProductListScreenState extends State<ProductListScreen> {
         title: const Text("Products"),
         centerTitle: true,
       ),
-      body: FutureBuilder<List<ProductModel>>(
-          future: productList,
-          builder: (context, snapShot) {
-            print("Future");
-            if (snapShot.hasData) {
-              return productListWidget(snapShot.data);
-            } else if (snapShot.hasError) {
-              return const Center(
-                  child: Text(
-                "Something went wrong",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                ),
-              ));
-            }
-            return const Center(child: CircularProgressIndicator());
-          }),
+      body: Column(
+        children: [
+          Padding(
+            padding:
+            const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+            child: TextFormField(
+              controller: searchController,
+              decoration: const InputDecoration(
+                hintText: 'Search Product',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {});
+              },
+            ),
+          ),
+          FutureBuilder<List<ProductModel>>(
+              future: productList,
+              builder: (context, snapShot) {
+                print("Future");
+                if (snapShot.hasData) {
+                  return productListWidget(snapShot.data);
+                } else if (snapShot.hasError) {
+                  return const Center(
+                      child: Text(
+                    "Something went wrong",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                    ),
+                  ));
+                }
+                return const Center(child: CircularProgressIndicator());
+              }),
+        ],
+      ),
     );
   }
 
   Widget productListWidget(List<ProductModel> item) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return ListView.builder(
-      itemCount: item.length,
-      itemBuilder: (context, index) {
-        var parseValue = double.parse(item[index].rating.rate);
-        var ratingValueDisplay = (parseValue * 100).round() / 100.0;
-        return Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(10.0),
-              width: width * 0.9,
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.green[100],
-                  width: 2,
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    offset: Offset(0.0, 0.0),
-                    blurRadius: 1.0,
+    return Expanded(
+      child: ListView.builder(
+        itemCount: item.length,
+        itemBuilder: (context, index) {
+          var parseValue = double.parse(item[index].rating.rate);
+          var ratingValueDisplay = (parseValue * 100).round() / 100.0;
+          return Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(10.0),
+                width: width * 0.9,
+                margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.green[100],
+                    width: 2,
                   ),
-                ],
-                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        // mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Image.network(
-                            item[index].image,
-                            height: 80.0,
-                            width: 80.0,
-                            // color: Colors.red,
-                            fit: BoxFit.contain,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    item[index].title,
-                                    style: const TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
+                  boxShadow: const [
+                    BoxShadow(
+                      offset: Offset(0.0, 0.0),
+                      blurRadius: 1.0,
+                    ),
+                  ],
+                  borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          // mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Image.network(
+                              item[index].image,
+                              height: 80.0,
+                              width: 80.0,
+                              // color: Colors.red,
+                              fit: BoxFit.contain,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      item[index].title,
+                                      style: const TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Text(
-                                    item[index].description,
-                                    style: const TextStyle(
-                                        fontSize: 12.0, color: Colors.black),
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  RatingBar.builder(
-                                    allowHalfRating: true,
-                                    initialRating: ratingValueDisplay,
-                                    itemBuilder: (context, index) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
+                                    const SizedBox(
+                                      height: 10.0,
                                     ),
-                                    itemCount: 5,
-                                    itemSize: 20.0,
-                                    direction: Axis.horizontal,
-                                    onRatingUpdate: (rating) {
-                                      ratingValue = rating.toString();
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Text(
-                                    "${item[index].price}\$",
-                                    style: const TextStyle(
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.bold,
+                                    Text(
+                                      item[index].description,
+                                      style: const TextStyle(
+                                          fontSize: 12.0, color: Colors.black),
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    RatingBar.builder(
+                                      allowHalfRating: true,
+                                      initialRating: ratingValueDisplay,
+                                      itemBuilder: (context, index) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      itemCount: 5,
+                                      itemSize: 20.0,
+                                      direction: Axis.horizontal,
+                                      onRatingUpdate: (rating) {
+                                        ratingValue = rating.toString();
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Text(
+                                      "${item[index].price}\$",
+                                      style: const TextStyle(
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }
