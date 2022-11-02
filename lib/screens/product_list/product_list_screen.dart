@@ -103,13 +103,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisSize: MainAxisSize.max,
                       children: [
                         Image.network(
                           item[index].image,
                           height: 80.0,
                           width: 80.0,
+                          // color: Colors.red,
                           fit: BoxFit.contain,
                         ),
                         Expanded(
@@ -119,39 +120,36 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                            Text(
-                              item[index].title,
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            Text(
-                              item[index].description,
-                              style: TextStyle(
-                                  fontSize: 12.0, color: Colors.black),
-                            ),
+                                Text(
+                                  item[index].title,
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  item[index].description,
+                                  style: TextStyle(
+                                      fontSize: 12.0, color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  "${item[index].price}\$",
+                                  style: TextStyle(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                         ),
                       ],
-                    ),
-                    SizedBox(
-                      height: 6.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: Text(
-                        item[index].price,
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     ),
                   ],
                 ),
