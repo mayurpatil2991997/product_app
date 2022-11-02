@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:task_app/model/product/product_model.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:task_app/widget/search/search_widget.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({Key key}) : super(key: key);
@@ -13,13 +15,16 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductListScreen> {
   List<ProductModel> product = [];
+  List<ProductModel> filterSearch = [];
+  String query = "";
+  Timer debouncer;
   Future<List<ProductModel>> productList;
   String ratingValue = "";
   TextEditingController searchController = TextEditingController();
 
-  Future<List<ProductModel>> updateAndGetList() async {
-    return productDisplay();
-  }
+  // List<ProductModel> updateAndGetList() async {
+  //   return productDisplay();
+  // }
 
   Future<List<ProductModel>> productDisplay() async {
     try {
@@ -32,18 +37,54 @@ class _ProductListScreenState extends State<ProductListScreen> {
         for (var i = 0; i < data.length; i++) {
           product.add(ProductModel.fromJson(data[i]));
         }
-        return product;
+        print("eeeeeeeeeeeeee $query");
+        if(query.isEmpty) {
+          return product;
+        }
+         product.forEach((book) {
+          final titleLower = book.title.toLowerCase();
+          final searchLower = query.toLowerCase();
+
+          if ( titleLower.contains(searchLower)){
+            filterSearch.add(book);
+          }
+        });
+        return filterSearch;
       }
     } catch (e) {
       print("ProductDataError $e");
     }
   }
 
+  void debounce(
+      VoidCallback callback, {
+        Duration duration = const Duration(milliseconds: 1000),
+      }) {
+    if (debouncer != null) {
+      debouncer.cancel();
+    }
+
+    debouncer = Timer(duration, callback);
+  }
+
+  Future searchBook(String query) async => debounce(() async {
+    final books = await productDisplay();
+
+    if (!mounted) return;
+
+    setState(() {
+      this.query = query;
+      this.product = books;
+    });
+  });
+
   @override
   void initState() {
+    // productList = updateAndGetList();
+    filterSearch.addAll(product);
     super.initState();
-    productList = updateAndGetList();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,20 +98,36 @@ class _ProductListScreenState extends State<ProductListScreen> {
         children: [
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
             child: TextFormField(
               controller: searchController,
               decoration: const InputDecoration(
                 hintText: 'Search Product',
                 border: OutlineInputBorder(),
               ),
+              // onTap: () {
+              //   setState(() {
+              //     query = searchController.text;
+              //     print("xncjdnjdn $query");
+              //   });
+              // },
               onChanged: (value) {
-                setState(() {});
+                searchBook(value);
+                // filterSearch = [];
+                // for (var fruit in product) {
+                //   if (fruit.title.toLowerCase().contains(value.toLowerCase())) {
+                //     filterSearch.add(fruit);
+                //   }
+                // }
+                // print("Search $value");
+                // setState(() {
+                //   productListWidget(filterSearch);
+                // });
               },
             ),
           ),
           FutureBuilder<List<ProductModel>>(
-              future: productList,
+              future: productDisplay(),
               builder: (context, snapShot) {
                 print("Future");
                 if (snapShot.hasData) {
@@ -166,7 +223,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                     RatingBar.builder(
                                       allowHalfRating: true,
                                       initialRating: ratingValueDisplay,
-                                      itemBuilder: (context, index) => const Icon(
+                                      itemBuilder: (context, index) =>
+                                          const Icon(
                                         Icons.star,
                                         color: Colors.amber,
                                       ),
