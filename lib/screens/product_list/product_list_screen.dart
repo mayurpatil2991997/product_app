@@ -21,11 +21,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   String ratingValue = "";
   TextEditingController searchController = TextEditingController();
 
-  // List<ProductModel> updateAndGetList() async {
-  //   return productDisplay();
-  // }
-
-  //API call function
   Future<List<ProductModel>> productDisplay() async {
     try {
       var request =
@@ -33,11 +28,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
       if (request.statusCode == 200) {
         var data = json.decode(request.body) as List;
-        print("ProductData $data");
         for (var i = 0; i < data.length; i++) {
           product.add(ProductModel.fromJson(data[i]));
         }
-        print("eeeeeeeeeeeeee $query");
+
         if(query.isEmpty) {
           return product;
         }
@@ -52,7 +46,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         return filterSearch;
       }
     } catch (e) {
-      print("ProductDataError $e");
+      print(e);
     }
   }
 
@@ -85,7 +79,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   //Init Method
   @override
   void initState() {
-    // productList = updateAndGetList();
     filterSearch.addAll(product);
     super.initState();
   }
@@ -96,7 +89,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Products"),
+        title: const Text("Products List"),
         centerTitle: true,
       ),
       body: Column(
@@ -110,31 +103,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 hintText: 'Search Product',
                 border: OutlineInputBorder(),
               ),
-              // onTap: () {
-              //   setState(() {
-              //     query = searchController.text;
-              //     print("xncjdnjdn $query");
-              //   });
-              // },
               onChanged: (value) {
                 searchBook(value);
-                // filterSearch = [];
-                // for (var fruit in product) {
-                //   if (fruit.title.toLowerCase().contains(value.toLowerCase())) {
-                //     filterSearch.add(fruit);
-                //   }
-                // }
-                // print("Search $value");
-                // setState(() {
-                //   productListWidget(filterSearch);
-                // });
               },
             ),
           ),
           FutureBuilder<List<ProductModel>>(
               future: productDisplay(),
               builder: (context, snapShot) {
-                print("Future");
                 if (snapShot.hasData) {
                   return productListWidget(snapShot.data);
                 } else if (snapShot.hasError) {
@@ -157,7 +133,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   //Widget
   Widget productListWidget(List<ProductModel> item) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Expanded(
       child: ListView.builder(
@@ -193,13 +168,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          // mainAxisSize: MainAxisSize.max,
                           children: [
                             Image.network(
                               item[index].image,
                               height: 80.0,
                               width: 80.0,
-                              // color: Colors.red,
                               fit: BoxFit.contain,
                             ),
                             Expanded(
