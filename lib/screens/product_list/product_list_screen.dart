@@ -183,10 +183,20 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Text(
-                                      item[index].title,
+                                      item[index].category,
                                       style: const TextStyle(
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Text(
+                                      item[index].title,
+                                      style: const TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                     const SizedBox(
