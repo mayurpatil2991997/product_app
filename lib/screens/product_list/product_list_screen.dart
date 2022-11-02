@@ -94,7 +94,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   blurRadius: 1.0,
                 ),
               ],
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,25 +122,25 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               children: [
                                 Text(
                                   item[index].title,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 12.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10.0,
                                 ),
                                 Text(
                                   item[index].description,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 12.0, color: Colors.black),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10.0,
                                 ),
                                 Text(
                                   "${item[index].price}\$",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.bold,
                                   ),
